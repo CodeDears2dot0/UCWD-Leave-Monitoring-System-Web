@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCWD Leave Monitoring System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #FDFEE9;
+        }
+        .header {
+            background: #218838;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo-title {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        .logo-title img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        .logo-title h1 {
+            color: white;
+            font-size: 24px;
+            margin: 0;
+        }
+        .menu {
+            display: flex;
+            gap: 20px;
+            margin-right: 20px;
+        }
+        .menu a {
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            background: #d3d3d3;
+            border-radius: 10px;
+            border: 1px solid #999;
+        }
+        .menu a:hover {
+            background: #bbb;
+        }
+        .body-menu {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .body-menu button {
+            background: #fff;
+            border: 2px solid #333;
+            padding: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 10px;
+            width: 120px;
+            height: 120px;
+            color: black;
+        }
+        .body-menu button:hover {
+            background: #ddd;
+        }
+        .content {
+            padding: 20px;
+        }
+        iframe {
+            width: 1000px;
+            height: 500px;
+            border: 2px solid #333;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-title">
+            <img src="login_page_image_bg.png" alt="Logo">
+            <h1>Leave Monitoring System</h1>
+        </div>
+        <div class="menu">
+            <a href="#" onclick="goRec('record')">Record</a>
+            <a href="leave_summary_page.html" onclick="showSection('summary')">Summary</a>
+            <a href="log_in_page.html" onclick="showSection('profile')">Log out</a>
+        </div>
+    </div>
+    
+    <div class="content">
+        <h1>Calendar</h1>
+        <iframe src="https://calendar.google.com/calendar/embed?src=en.philippines%23holiday%40group.v.calendar.google.com&ctz=Asia%2FManila"></iframe>
+    </div>
+    
+    
+    <div class="content" id="summary" style="display: none;">
+        <h2>Summary Section</h2>
+        <p>View summaries of records here.</p>
+    </div>
+    
+    <div class="content" id="profile" style="display: none;">
+        <h2>Profile Section</h2>
+        <p>Manage your profile details.</p>
+    </div>
+    
+    <script>
+        function showSection(section) {
+            document.getElementById('record').style.display = 'none';
+            document.getElementById('summary').style.display = 'none';
+            document.getElementById('profile').style.display = 'none';
+            document.getElementById(section).style.display = 'block';
+        }
+        function goRec(){
+            window.location.href = "leave_application_page.html";
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCWD Leave Monitoring System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FDFEE9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .logo { 
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .logo img {
+
+            height: 250px;
+            width: 250px;
+        }
+        .logo {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .login-container input[type="checkbox"] {
+            margin: 10px 0;
+        }
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .login-container button:hover {
+            background-color: #218838;
+        }
+        .login-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .login-container a:hover {
+            text-decoration: underline;
+        }
+        button{
+            background-color: #7CC644;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="login_page_image_bg.png" alt="Logo">
+    </div>
+    <div class="login-container">
+        <h2>Sign In</h2>
+        <form action="leave_monitor_page.html">
+            <input type="text" placeholder="Username" >
+            <input type="password" placeholder="Password" >
+            <label>
+                <input type="checkbox"> Remember Me
+            </label>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="sign_up_page.html">Sign up</a></p>
+    </div>
+</body>
+</html>
