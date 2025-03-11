@@ -86,11 +86,11 @@
 </body>
 
 <script type="module">
-    // Import Firebase modules
+
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-    // Firebase configuration
+
     const firebaseConfig = {
         apiKey: "AIzaSyADFPfGqO90p2JYhkM92CAOlPqgAwMtw-g",
         authDomain: "ucwd-9c592.firebaseapp.com",
@@ -102,13 +102,13 @@
         measurementId: "G-5SMBQH4X1J"
     };
 
-    // Initialize Firebase
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Sign-up function
+
     document.getElementById("signup-form").addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent form from submitting normally
+        event.preventDefault(); 
 
         const username = document.getElementById("username").value;
         const email = document.getElementById("email").value;
@@ -121,11 +121,11 @@
             return;
         }
 
-        // Create user in Firebase Authentication
+
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 alert("Sign-up successful! Redirecting to login page...");
-                window.location.href = "log_in_page.html"; // Redirect to login page
+                window.location.href = "log_in_page.html"; 
             })
             .catch((error) => {
                 alert("Sign-up failed: " + error.message);
