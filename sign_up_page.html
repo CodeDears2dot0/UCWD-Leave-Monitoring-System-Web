@@ -15,20 +15,15 @@
             margin: 0;
         }
         .logo {
-            margin-top: 40px;
-            text-align: center;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        .logo img {
-            height: 250px;
-            width: 250px;
-        }
-        .logo {
             position: absolute;
             top: -60px;
             left: 50%;
             transform: translateX(-50%);
+            text-align: center;
+        }
+        .logo img {
+            height: 250px;
+            width: 250px;
         }
         .signup-container {
             background-color: #fff;
@@ -44,9 +39,7 @@
             font-size: 24px;
             color: #333;
         }
-        .signup-container input[type="text"],
-        .signup-container input[type="email"],
-        .signup-container input[type="password"] {
+        .signup-container input {
             width: 90%;
             padding: 10px;
             margin: 10px 0;
@@ -81,13 +74,62 @@
     </div>
     <div class="signup-container">
         <h2>Sign Up</h2>
-        <form action="log_in_page.html">
-            <input type="text" placeholder="Username" >
-            <input type="email" placeholder="Email" >
-            <input type="password" placeholder="Password" >
-            <input type="password" placeholder="Re-type Password" >
+        <form id="signup-form">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="password" id="confirm-password" placeholder="Re-type Password" required>
             <button type="submit">Sign Up</button>
         </form>
+        <p>Already have an account? <a href="log_in_page.html">Log in</a></p>
     </div>
 </body>
+
+<script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyADFPfGqO90p2JYhkM92CAOlPqgAwMtw-g",
+        authDomain: "ucwd-9c592.firebaseapp.com",
+        databaseURL: "https://ucwd-9c592-default-rtdb.firebaseio.com",
+        projectId: "ucwd-9c592",
+        storageBucket: "ucwd-9c592.firebasestorage.app",
+        messagingSenderId: "839479132489",
+        appId: "1:839479132489:web:cf43a146d6abd2284f1a98",
+        measurementId: "G-5SMBQH4X1J"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Sign-up function
+    document.getElementById("signup-form").addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirm-password").value;
+
+        // Validate password match
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        // Create user in Firebase Authentication
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                alert("Sign-up successful! Redirecting to login page...");
+                window.location.href = "log_in_page.html"; // Redirect to login page
+            })
+            .catch((error) => {
+                alert("Sign-up failed: " + error.message);
+            });
+    });
+</script>
 </html>

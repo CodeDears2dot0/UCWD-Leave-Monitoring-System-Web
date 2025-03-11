@@ -10,10 +10,56 @@
             background-color: #FDFEE9;
             margin: 0;
             padding: 0;
+            text-align: center;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+        }
+
+        .header {
+            background: #218838;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+
+        .logo-title img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .logo-title h1 {
+            color: white;
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+            margin-right: 20px;
+        }
+
+        .menu a {
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            background: #d3d3d3;
+            border-radius: 10px;
+            border: 1px solid #999;
+        }
+
+        .menu a:hover {
+            background: #bbb;
         }
 
         .container {
@@ -24,6 +70,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
             position: relative;
+            margin-top: 20px;
         }
 
         .top-container {
@@ -118,24 +165,37 @@
     </style>
 </head>
 <body>
-    <div class="container">
 
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-title">
+            <img src="login_page_image_bg.png" alt="Logo">
+            <h1>Leave Monitoring System</h1>
+        </div>
+        <div class="menu">
+            <a href="#" onclick="goRec('record')">Record</a>
+            <a href="leave_summary_page.html" onclick="showSection('summary')">Summary</a>
+            <a href="log_in_page.html" onclick="showSection('profile')">Log out</a>
+        </div>
+    </div>
+
+    <div class="container">
         <div class="top-container">
             <div class="logo">
                 <img src="login_page_image_bg.png" alt="Logo">
             </div>
             <div class="app-label">
-                Leave Application
+                Leave Summary
             </div>
         </div>
 
         <div class="card">
             <h2>Employee Details</h2>
-            <input type="text" value="John Doe">
-            <input type="text" value="Sick Leave">
-            <input type="text" value="March 5, 2025">
-            <input type="text" value="3">
-            <input type="text" value="March 6 - March 8, 2025">
+            <input type="text" placeholder="Fullname">
+            <input type="text" placeholder="Type of Leave">
+            <input type="date" placeholder="date">
+            <input type="text" placeholder="Days">
+            <input type="date" placeholder="Date Duration">
             <button>Save</button>
         </div>
 

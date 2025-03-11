@@ -7,20 +7,21 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #FDFEE9;
             margin: 0;
             padding: 0;
+            text-align: center;
+            background-color: #FDFEE9;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .header {
+            width: 100%;
             background: #218838;
             padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width: 100%;
         }
         .logo-title {
             display: flex;
@@ -113,6 +114,34 @@
         .bottom-buttons button:hover {
             background-color: #6BB03A;
         }
+        .top-container {
+            background-color: green;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px; 
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo img {
+            width: 74px;
+            height: 74px;
+        }
+        .app-label {
+            font-size: 24px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -129,6 +158,15 @@
     </div>
 
     <div class="container">
+        <div class="top-container">
+            <div class="logo">
+                <img src="login_page_image_bg.png" alt="Logo">
+            </div>
+            <div class="app-label">
+                Leave Application
+            </div>
+        </div>
+
         <div class="card">
             <h2>Employee Details</h2>
             <input type="text" placeholder="Employee Name">
