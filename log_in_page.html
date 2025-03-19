@@ -3,135 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UCWD Leave Monitoring System</title>
+    <title>UCWD Leave Monitoring System - Login</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background-color: #FDFEE9;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .left-side {
+            width: 50%;
+            background: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .logo { 
-            margin-top: 40px;
-            text-align: center;
             padding: 20px;
-            margin-bottom: 0px;
         }
+
         .logo img {
-            margin-top: 20px;
-            height: 250px;
-            width: 250px;
+            max-width: 90%;
+            height: auto;
         }
-        .logo {
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .login-container {
-            background-color: #fff;
+
+        .right-side {
+            width: 50%;
+            background: rgba(40, 167, 69, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
-            margin-top: 50px;
         }
+
+        .login-container {
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            width: 380px;
+            text-align: center;
+        }
+
         .login-container h2 {
             margin-bottom: 20px;
-            font-size: 24px;
+            font-size: 28px;
             color: #333;
         }
+
         .login-container input[type="email"],
         .login-container input[type="password"] {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
+            font-size: 16px;
         }
+
         .login-container input[type="checkbox"] {
             margin: 10px 0;
         }
+
         .login-container button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #28a745;
             border: none;
-            border-radius: 4px;
-            color: #fff;
-            font-size: 16px;
+            border-radius: 5px;
+            color: white;
+            font-size: 18px;
             cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
         }
+
         .login-container button:hover {
             background-color: #218838;
         }
+
         .login-container a {
             color: #007bff;
             text-decoration: none;
         }
+
+        .login-container p {
+            margin-top: 20px;
+        }
+
         .login-container a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <div class="logo">
-        <img src="bg_logo.png" alt="Logo">
+    <div class="left-side">
+        <div class="logo">
+            <img src="bg_logo.png" alt="Logo">
+        </div>
     </div>
-    <div class="login-container">
-        <h2>Sign In</h2>
-        <form id="login-form">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <label>
-                <input type="checkbox"> Remember Me
-            </label>
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="sign_up_page.html">Sign up</a></p>
+
+    <div class="right-side">
+        <div class="login-container">
+            <h2>Sign In</h2>
+            <form id="login-form">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <label>
+                    <input type="checkbox"> Remember Me
+                </label>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="sign_up_page.html" class="fade-link">Sign up</a></p>
+        </div>
     </div>
-</body>
 
-<script type="module">
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
 
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-auth.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyADFPfGqO90p2JYhkM92CAOlPqgAwMtw-g",
+            authDomain: "ucwd-9c592.firebaseapp.com",
+            databaseURL: "https://ucwd-9c592-default-rtdb.firebaseio.com",
+            projectId: "ucwd-9c592",
+            storageBucket: "ucwd-9c592.firebasestorage.app",
+            messagingSenderId: "839479132489",
+            appId: "1:839479132489:web:cf43a146d6abd2284f1a98",
+            measurementId: "G-5SMBQH4X1J"
+        };
 
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyADFPfGqO90p2JYhkM92CAOlPqgAwMtw-g",
-        authDomain: "ucwd-9c592.firebaseapp.com",
-        databaseURL: "https://ucwd-9c592-default-rtdb.firebaseio.com",
-        projectId: "ucwd-9c592",
-        storageBucket: "ucwd-9c592.firebasestorage.app",
-        messagingSenderId: "839479132489",
-        appId: "1:839479132489:web:cf43a146d6abd2284f1a98",
-        measurementId: "G-5SMBQH4X1J"
-    };
+        document.getElementById("login-form").addEventListener("submit", (event) => {
+            event.preventDefault();
 
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    document.body.style.opacity = "0";
+                    setTimeout(() => {
+                        window.location.href = "leave_monitor_page.html";
+                    }, 500);
+                })
+                .catch((error) => {
+                    alert("Login failed: " + error.message);
+                });
+        });
 
-
-    document.getElementById("login-form").addEventListener("submit", (event) => {
-        event.preventDefault(); 
-
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                alert("Login successful!");
-                window.location.href = "leave_monitor_page.html"; 
-            })
-            .catch((error) => {
-                alert("Login failed: " + error.message);
+        document.querySelectorAll(".fade-link").forEach(link => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                document.body.style.opacity = "0";
+                setTimeout(() => {
+                    window.location.href = link.href;
+                }, 500);
             });
-    });
-</script>
+        });
+    </script>
+</body>
 </html>
