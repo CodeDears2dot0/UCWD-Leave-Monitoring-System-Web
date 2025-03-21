@@ -9,11 +9,11 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            text-align: center;
             background-color: #FDFEE9;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            height: 100vh;
+            overflow: hidden;
         }
         .header {
             width: 100%;
@@ -55,15 +55,78 @@
         .menu a:hover {
             background: #bbb;
         }
-        .container {
+        .main-container {
+            display: flex;
             width: 100%;
+            flex-grow: 1;
+            justify-content: space-between;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .left-container {
+            flex: 1;
+            background: #ffffff;
+            padding: 20px;
+            height: fit-content;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .calendar-container {
+            margin-bottom: 20px;
+        }
+        .calendar-container h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .calendar-container input {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .right-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 90%;
             max-width: 400px;
             background-color: #fff;
             border-radius: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            position: relative;
-            margin-top: 20px;
+        }
+        .top-container {
+            background-color: green;
+            color: white;
+            padding: 20px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            background-color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .logo img {
+            width: 74px;
+            height: 74px;
+        }
+        .app-label {
+            font-size: 24px;
+            font-weight: bold;
         }
         .card {
             background-color: white;
@@ -77,13 +140,22 @@
             font-size: 24px;
             margin-bottom: 20px;
         }
-        .card input {
+        .card input, .card select {
             width: 90%;
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
+            appearance: none;
+            background-color: white;
+            color: rgb(104, 101, 101);
         }
+        .card select {
+            width: 96%;
+        }
+        
+
         .card button {
             width: 100%;
             padding: 10px;
@@ -115,38 +187,10 @@
         .bottom-buttons button:hover {
             background-color: #6BB03A;
         }
-        .top-container {
-            background-color: green;
-            color: white;
-            padding: 20px;
-            border-radius: 20px 20px 0 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px; 
-        }
-        .logo {
-            width: 50px;
-            height: 50px;
-            margin-right: 20px;
-            background-color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .logo img {
-            width: 74px;
-            height: 74px;
-        }
-        .app-label {
-            font-size: 24px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
+
     <div class="header">
         <div class="logo-title">
             <a href="leave_monitor_page.html">
@@ -155,42 +199,79 @@
             <h1>Leave Monitoring System</h1>
         </div>
         <div class="menu">
-            <a href="leave_summary_page.html" onclick="showSection('summary')">Summary</a>
-            <a href="log_in_page.html" onclick="showSection('profile')">Log out</a>
+            <a href="leave_summary_page.html">Summary</a>
+            <a href="log_in_page.html">Log out</a>
         </div>
     </div>
 
-    <div class="container">
-        <div class="top-container">
-            <div class="logo">
-                <img src="bg_logo.png" alt="Logo">
+    <div class="main-container">
+        <div class="left-container">
+            <h2>Select Leave Dates</h2>
+            
+            <div class="calendar-container">
+                <h2>Start Date</h2>
+                <input type="date" id="start-date">
             </div>
-            <div class="app-label">
-                Leave Application
+
+            <div class="calendar-container">
+                <h2>End Date</h2>
+                <input type="date" id="end-date">
             </div>
         </div>
 
-        <div class="card">
-            <h2>Employee Details</h2>
-            <input type="text" placeholder="Employee Name">
-            <input type="text" placeholder="Leave Type">
-            <input type="text" placeholder="Date of Application">
-            <input type="text" placeholder="Number of Days">
-            <input type="text" placeholder="Date of Leave">
-            <button>Save</button>
-        </div>
-        <div class="bottom-buttons">
-            <button id="btnsummary" onclick="summ()">Summary</button>
-            <button id="btnexit" onclick="exit()">Cancel</button>
+        <div class="right-container">
+            <div class="container">
+                <div class="top-container">
+                    <div class="logo">
+                        <img src="bg_logo.png" alt="Logo">
+                    </div>
+                    <div class="app-label">Leave Application</div>
+                </div>
+
+                <div class="card">
+                    <h2>Employee Details</h2>
+                    <input type="text" placeholder="Employee Name">
+                    <select>
+                        <option value="" disabled selected>Select Leave Type</option>
+                        <option value="sick-leave">Sick Leave</option>
+                        <option value="vacation-leave">Vacation Leave</option>
+                        <option value="birthday-leave">Birthday Leave</option>
+                        <option value="bereavement-leave">Mag Rewind Leave</option>
+                        <option value="service-incentive-leave">Service Incentive Leave</option>
+                        <option value="maternity-leave">Maternity Leave</option>
+                        <option value="paternity-leave">Paternity Leave</option>
+                        <option value="solo-parent-leave">Solo Parent Leave</option>
+                        <option value="special-leave-for-women">Special Leave for Trans</option>
+                        <option value="official-business-leave">Official Business Leave</option>
+                    </select>
+                    <input type="text" placeholder="Date of Application">
+                    <input type="text" placeholder="Number of Days">
+                    <input type="text" id="selected-dates" placeholder="Date of Leave" readonly>
+                    <button onclick="submitLeave()">Save</button>
+                </div>
+
+                <div class="bottom-buttons">
+                    <button onclick="summ()">Summary</button>
+                    <button onclick="exit()">Cancel</button>
+                </div>
+
+            </div>
         </div>
     </div>
+
+    <script>
+        function exit(){
+            window.location.href = "leave_monitor_page.html";
+        }
+        function summ(){
+            window.location.href = "leave_summary_page.html";
+        }
+        function submitLeave() {
+            let startDate = document.getElementById("start-date").value;
+            let endDate = document.getElementById("end-date").value;
+            document.getElementById("selected-dates").value = startDate + " to " + endDate;
+        }
+    </script>
+
 </body>
-<script>
-    function exit(){
-        window.location.href = "leave_monitor_page.html";
-    }
-    function summ(){
-        window.location.href = "leave_summary_page.html";
-    }
-</script>
 </html>
