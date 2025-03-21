@@ -93,7 +93,7 @@
         }
         .container {
             width: 90%;
-            max-width: 400px;
+            max-width: 500px;
             background-color: #fff;
             border-radius: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -155,7 +155,6 @@
             width: 96%;
         }
         
-
         .card button {
             width: 100%;
             padding: 10px;
@@ -205,19 +204,7 @@
     </div>
 
     <div class="main-container">
-        <div class="left-container">
-            <h2>Select Leave Dates</h2>
-            
-            <div class="calendar-container">
-                <h2>Start Date</h2>
-                <input type="date" id="start-date">
-            </div>
-
-            <div class="calendar-container">
-                <h2>End Date</h2>
-                <input type="date" id="end-date">
-            </div>
-        </div>
+        
 
         <div class="right-container">
             <div class="container">
@@ -245,6 +232,11 @@
                         <option value="official-business-leave">Official Business Leave</option>
                     </select>
                     <input type="text" placeholder="Date of Application">
+                    <h4 style="margin-top: 0%; margin-bottom: 0%;">Select Leave Dates</h4>
+                    <h6 style="margin-bottom: 1%; margin-top: 1%;">Start Date</h6>
+                    <input type="date" placeholder="Start Date" style="margin-bottom: 0%; margin-top: 0%;">
+                    <h6 style="margin-bottom: 0%; margin-top: 1%;">End Date</h6>
+                    <input type="date" placeholder="End Date" style="margin-top: 0%;">
                     <input type="text" placeholder="Number of Days">
                     <input type="text" id="selected-dates" placeholder="Date of Leave" readonly>
                     <button onclick="submitLeave()">Save</button>
