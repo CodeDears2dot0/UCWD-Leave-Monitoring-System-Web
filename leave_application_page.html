@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
             height: 100vh;
             overflow: hidden;
         }
+
         .header {
             width: 100%;
             background: #218838;
@@ -23,26 +25,31 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .logo-title {
             display: flex;
             align-items: center;
             margin-left: 10px;
         }
+
         .logo-title img {
             height: 60px;
             width: 60px;
             margin-right: 8px;
         }
+
         .logo-title h1 {
             color: white;
             font-size: 20px;
             margin: 0;
         }
+
         .menu {
             display: flex;
             gap: 10px;
             margin-right: 10px;
         }
+
         .menu a {
             color: black;
             text-decoration: none;
@@ -52,9 +59,11 @@
             border-radius: 8px;
             border: 1px solid #999;
         }
+
         .menu a:hover {
             background: #bbb;
         }
+
         .main-container {
             display: flex;
             width: 100%;
@@ -64,6 +73,7 @@
             gap: 10px;
             height: calc(100vh - 80px);
         }
+
         .container {
             flex: 1;
             background-color: #fff;
@@ -76,6 +86,7 @@
             max-height: fit-content;
             overflow: auto;
         }
+
         .top-container {
             background-color: green;
             color: white;
@@ -85,6 +96,7 @@
             font-size: 18px;
             font-weight: bold;
         }
+
         .card {
             flex-grow: 1;
             overflow: auto;
@@ -92,7 +104,9 @@
             flex-direction: column;
             gap: 10px;
         }
-        .card input, .card select {
+
+        .card input,
+        .card select {
             width: 100%;
             padding: 8px;
             margin: 5px 0;
@@ -101,13 +115,16 @@
             font-size: 14px;
             box-sizing: border-box;
         }
+
         .date-inputs {
             display: flex;
             gap: 5px;
         }
+
         .date-inputs input {
             flex: 1;
         }
+
         .card button {
             width: 100%;
             padding: 10px;
@@ -119,20 +136,24 @@
             cursor: pointer;
             margin-top: 8px;
         }
+
         .card button:hover {
             background-color: #6BB03A;
         }
+
         .leave-requests {
             flex-grow: 1;
             overflow: auto;
             max-height: 60vh;
         }
+
         .leave-requests table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .leave-requests th, .leave-requests td {
+        .leave-requests th,
+        .leave-requests td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: center;
@@ -143,6 +164,7 @@
             background-color: #7CC644;
             color: white;
         }
+
         .leave-requests button {
             padding: 5px;
             border: none;
@@ -150,22 +172,27 @@
             cursor: pointer;
             font-size: 12px;
         }
+
         .approve-btn {
             background-color: #4CAF50;
             color: white;
         }
+
         .reject-btn {
             background-color: #D9534F;
             color: white;
         }
+
         .approve-btn:hover {
             background-color: #45A049;
         }
+
         .reject-btn:hover {
             background-color: #C9302C;
         }
     </style>
 </head>
+
 <body>
 
     <div class="header">
@@ -182,7 +209,7 @@
     </div>
 
     <div class="main-container">
-        
+
         <div class="container">
             <div class="top-container">Leave Application</div>
             <div class="card">
@@ -197,6 +224,7 @@
                 <h4 style="font-size: 16px;">Select Leave Dates</h4>
                 <div class="date-inputs">
                     <input type="date">
+                    <p style="font-weight: bold;">To</p>
                     <input type="date">
                 </div>
                 <input type="text" placeholder="Number of Days">
@@ -249,15 +277,22 @@
         function approveRequest(button) {
             let row = button.parentNode.parentNode;
             row.style.backgroundColor = "#D4EDDA";
+            let cell = button.parentNode;
+            cell.innerHTML = '<button class="approve-btn" style="width: 100%;">Approved</button>';
             alert("Leave Approved!");
         }
 
         function rejectRequest(button) {
             let row = button.parentNode.parentNode;
             row.style.backgroundColor = "#F8D7DA";
+            let cell = button.parentNode;
+            cell.innerHTML = '<button class="reject-btn" style="width: 100%;">Rejected</button>';
             alert("Leave Rejected!");
         }
+
+
     </script>
 
 </body>
+
 </html>
