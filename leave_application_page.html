@@ -18,7 +18,7 @@
         .header {
             width: 100%;
             background: #218838;
-            padding: 15px;
+            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -26,30 +26,30 @@
         .logo-title {
             display: flex;
             align-items: center;
-            margin-left: 20px;
+            margin-left: 10px;
         }
         .logo-title img {
-            height: 75px;
-            width: 75px;
-            margin-right: 10px;
+            height: 60px;
+            width: 60px;
+            margin-right: 8px;
         }
         .logo-title h1 {
             color: white;
-            font-size: 24px;
+            font-size: 20px;
             margin: 0;
         }
         .menu {
             display: flex;
-            gap: 20px;
-            margin-right: 20px;
+            gap: 10px;
+            margin-right: 10px;
         }
         .menu a {
             color: black;
             text-decoration: none;
-            font-size: 18px;
-            padding: 10px 15px;
+            font-size: 16px;
+            padding: 8px 12px;
             background: #d3d3d3;
-            border-radius: 10px;
+            border-radius: 8px;
             border: 1px solid #999;
         }
         .menu a:hover {
@@ -59,102 +59,55 @@
             display: flex;
             width: 100%;
             flex-grow: 1;
-            justify-content: space-between;
-            padding: 20px;
-            overflow: hidden;
-        }
-        .left-container {
-            flex: 1;
-            background: #ffffff;
-            padding: 20px;
-            height: fit-content;
-            border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .calendar-container {
-            margin-bottom: 20px;
-        }
-        .calendar-container h2 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        .calendar-container input {
-            width: 80%;
+            justify-content: space-around;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        .right-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
+            gap: 10px;
+            height: calc(100vh - 80px);
         }
         .container {
-            width: 90%;
-            max-width: 500px;
+            flex: 1;
             background-color: #fff;
-            border-radius: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            min-height: fit-content;
+            max-height: fit-content;
+            overflow: auto;
         }
         .top-container {
             background-color: green;
             color: white;
-            padding: 20px;
-            border-radius: 20px 20px 0 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        .logo {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            background-color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .logo img {
-            width: 74px;
-            height: 74px;
-        }
-        .app-label {
-            font-size: 24px;
+            padding: 10px;
+            border-radius: 15px 15px 0 0;
+            text-align: center;
+            font-size: 18px;
             font-weight: bold;
         }
         .card {
-            background-color: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .card h2 {
-            text-align: center;
-            font-size: 24px;
-            margin-bottom: 20px;
+            flex-grow: 1;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         .card input, .card select {
-            width: 90%;
-            padding: 10px;
-            margin: 10px 0;
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 16px;
-            appearance: none;
-            background-color: white;
-            color: rgb(104, 101, 101);
+            font-size: 14px;
+            box-sizing: border-box;
         }
-        .card select {
-            width: 96%;
+        .date-inputs {
+            display: flex;
+            gap: 5px;
         }
-        
+        .date-inputs input {
+            flex: 1;
+        }
         .card button {
             width: 100%;
             padding: 10px;
@@ -162,29 +115,54 @@
             border: none;
             border-radius: 4px;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
+            margin-top: 8px;
         }
         .card button:hover {
             background-color: #6BB03A;
         }
-        .bottom-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
+        .leave-requests {
+            flex-grow: 1;
+            overflow: auto;
+            max-height: 60vh;
         }
-        .bottom-buttons button {
-            width: 30%;
-            padding: 10px;
+        .leave-requests table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leave-requests th, .leave-requests td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        .leave-requests th {
             background-color: #7CC644;
+            color: white;
+        }
+        .leave-requests button {
+            padding: 5px;
             border: none;
             border-radius: 4px;
-            color: white;
-            font-size: 16px;
             cursor: pointer;
+            font-size: 12px;
         }
-        .bottom-buttons button:hover {
-            background-color: #6BB03A;
+        .approve-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .reject-btn {
+            background-color: #D9534F;
+            color: white;
+        }
+        .approve-btn:hover {
+            background-color: #45A049;
+        }
+        .reject-btn:hover {
+            background-color: #C9302C;
         }
     </style>
 </head>
@@ -205,62 +183,79 @@
 
     <div class="main-container">
         
-        <div class="right-container">
-            <div class="container">
-                <div class="top-container">
-                    <div class="logo">
-                        <img src="bg_logo.png" alt="Logo">
-                    </div>
-                    <div class="app-label">Leave Application</div>
+        <div class="container">
+            <div class="top-container">Leave Application</div>
+            <div class="card">
+                <h2 style="font-size: 18px;">Employee Details</h2>
+                <input type="text" placeholder="Employee Name">
+                <select class="select-leavetype">
+                    <option value="" disabled selected>Select Leave Type</option>
+                    <option value="sick-leave">Sick Leave</option>
+                    <option value="vacation-leave">Vacation Leave</option>
+                </select>
+                <input type="date">
+                <h4 style="font-size: 16px;">Select Leave Dates</h4>
+                <div class="date-inputs">
+                    <input type="date">
+                    <input type="date">
                 </div>
-
-                <div class="card">
-                    <h2>Employee Details</h2>
-                    <input type="text" placeholder="Employee Name">
-                    <select>
-                        <option value="" disabled selected>Select Leave Type</option>
-                        <option value="sick-leave">Sick Leave</option>
-                        <option value="vacation-leave">Vacation Leave</option>
-                        <option value="birthday-leave">Birthday Leave</option>
-                        <option value="bereavement-leave">Mag Rewind Leave</option>
-                        <option value="service-incentive-leave">Service Incentive Leave</option>
-                        <option value="maternity-leave">Maternity Leave</option>
-                        <option value="paternity-leave">Paternity Leave</option>
-                        <option value="solo-parent-leave">Solo Parent Leave</option>
-                        <option value="special-leave-for-women">Special Leave for Trans</option>
-                        <option value="official-business-leave">Official Business Leave</option>
-                    </select>
-                    <input type="text" placeholder="Date of Application">
-                    <h4 style="margin-top: 0%; margin-bottom: 0%;">Select Leave Dates</h4>
-                    <h6 style="margin-bottom: 1%; margin-top: 1%;">Start Date</h6>
-                    <input type="date" placeholder="Start Date" style="margin-bottom: 0%; margin-top: 0%;">
-                    <h6 style="margin-bottom: 0%; margin-top: 1%;">End Date</h6>
-                    <input type="date" placeholder="End Date" style="margin-top: 0%;">
-                    <input type="text" placeholder="Number of Days">
-                    <input type="text" id="selected-dates" placeholder="Date of Leave">
-                    <button onclick="submitLeave()">Save</button>
-                </div>
-
-                <div class="bottom-buttons">
-                    <button onclick="summ()">Summary</button>
-                    <button onclick="exit()">Cancel</button>
-                </div>
-
+                <input type="text" placeholder="Number of Days">
+                <button onclick="submitLeave()">Save</button>
             </div>
         </div>
+
+        <div class="container">
+            <div class="top-container">Leave Requests</div>
+            <div class="leave-requests">
+                <table>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Leave Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr>
+                        <td>Basta Rofer</td>
+                        <td>Basta Leave</td>
+                        <td>2025-04-10</td>
+                        <td>2025-04-12</td>
+                        <td>
+                            <button class="approve-btn" onclick="approveRequest(this)">Approve</button>
+                            <button class="reject-btn" onclick="rejectRequest(this)">Reject</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>ML BB</td>
+                        <td>Meet with Ex Leave</td>
+                        <td>2025-04-05</td>
+                        <td>2025-04-07</td>
+                        <td>
+                            <button class="approve-btn" onclick="approveRequest(this)">Approve</button>
+                            <button class="reject-btn" onclick="rejectRequest(this)">Reject</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        function exit(){
-            window.location.href = "leave_monitor_page.html";
-        }
-        function summ(){
-            window.location.href = "leave_summary_page.html";
-        }
         function submitLeave() {
-            let startDate = document.getElementById("start-date").value;
-            let endDate = document.getElementById("end-date").value;
-            document.getElementById("selected-dates").value = startDate + " to " + endDate;
+            alert("Leave application submitted!");
+        }
+
+        function approveRequest(button) {
+            let row = button.parentNode.parentNode;
+            row.style.backgroundColor = "#D4EDDA";
+            alert("Leave Approved!");
+        }
+
+        function rejectRequest(button) {
+            let row = button.parentNode.parentNode;
+            row.style.backgroundColor = "#F8D7DA";
+            alert("Leave Rejected!");
         }
     </script>
 
