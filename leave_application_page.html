@@ -5,6 +5,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UCWD Leave Monitoring System</title>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyADFPfGqO90p2JYhkM92CAOlPqgAwMtw-g",
+            authDomain: "ucwd-9c592.firebaseapp.com",
+            projectId: "ucwd-9c592",
+            storageBucket: "ucwd-9c592.appspot.com",
+            messagingSenderId: "839479132489",
+            appId: "1:839479132489:web:cf43a146d6abd2284f1a98",
+            measurementId: "G-5SMBQH4X1J"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        console.log("Firebase initialized successfully!");
+
+        async function submitLeave() {
+            const employeeIdField = document.getElementById("employeeId");
+            const employeeNameField = document.getElementById("employeeName");
+            const leaveTypeField = document.getElementById("leaveType");
+            const startDateField = document.getElementById("startDate");
+            const endDateField = document.getElementById("endDate");
+            const numberOfDaysField = document.getElementById("numberOfDays");
+            const dateSubmittedField = document.getElementById("dateSubmitted");
+
+            if (!employeeIdField || !employeeNameField || !leaveTypeField ||
+                !startDateField || !endDateField || !numberOfDaysField || !dateSubmittedField) {
+                console.error("One or more required input fields are missing in the DOM.");
+                alert("Form fields are missing Check your HTML.");
+                return;
+            }
+
+            const employeeId = employeeIdField.value.trim();
+            const employeeName = employeeNameField.value.trim();
+            const leaveType = leaveTypeField.value.trim();
+            const startDate = startDateField.value;
+            const endDate = endDateField.value;
+            const numberOfDays = numberOfDaysField.value;
+            const dateSubmitted = dateSubmittedField.value;
+
+            if (!employeeId || !employeeName || !leaveType || !startDate || !endDate || !numberOfDays || !dateSubmitted) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            try {
+                console.log(`Submitting leave request for ${employeeName} (ID: ${employeeId})`);
+
+                await addDoc(collection(db, "Leave Applicants", employeeId, "Leave Application"), {
+                    applicant: employeeName,
+                    applicationLeaveType: leaveType,
+                    applicationLeaveDate: startDate,
+                    applicationEndDate: endDate,
+                    applicationLeaveDays: numberOfDays,
+                    applicationStatus: "Pending",
+                    applicationID: employeeId
+                });
+
+
+
+                alert("Leave application submitted successfully!");
+                loadLeaveRequests(); // Refresh table
+            } catch (error) {
+                console.error("Error adding leave request:", error);
+            }
+        }
+
+
+        async function loadLeaveRequests() {
+            const tableBody = document.getElementById("leaveRequestsBody");
+            tableBody.innerHTML = "";
+
+            try {
+                console.log("Loading leave requests...");
+
+                const leaveApplicantsSnapshot = await getDocs(collection(db, "Leave Applicants"));
+
+                if (leaveApplicantsSnapshot.empty) {
+                    console.warn("No leave applicants found in Firestore.");
+                    return;
+                }
+
+                for (const employeeDoc of leaveApplicantsSnapshot.docs) {
+                    const employeeId = employeeDoc.id;
+                    console.log(`Checking Employee ID: ${employeeId}`);
+
+                    const leaveApplicationsRef = collection(db, "Leave Applicants", employeeId, "Leave Application");
+                    const leaveApplicationsSnapshot = await getDocs(leaveApplicationsRef);
+
+                    if (leaveApplicationsSnapshot.empty) {
+                        console.warn(`No leave applications found for Employee ID: ${employeeId}`);
+                    } else {
+                        leaveApplicationsSnapshot.forEach((leaveDoc) => {
+                            const data = leaveDoc.data();
+                            console.log(`Leave Application Found:`, data);
+
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                        <td>${data.applicant || "N/A"}</td>
+                        <td>${data.applicationLeaveType || "N/A"}</td>
+                        <td>${data.applicationLeaveDate || "N/A"}</td>
+                        <td>${data.applicationEndDate || "N/A"}</td>
+                        <td>
+                            ${data.applicationStatus === "Pending" ? `
+                                <button class="approve-btn" onclick="updateRequest('${employeeId}', '${leaveDoc.id}', 'Approved')">Approve</button>
+                                <button class="reject-btn" onclick="updateRequest('${employeeId}', '${leaveDoc.id}', 'Rejected')">Reject</button>
+                            ` : `<button class="${data.applicationStatus === 'Approved' ? 'approve-btn' : 'reject-btn'}" style="width: 100%;">${data.applicationStatus}</button>`}
+                        </td>
+                    `;
+                            tableBody.appendChild(row);
+                        });
+                    }
+                }
+                console.log("Leave requests loaded successfully!");
+            } catch (error) {
+                console.error("Error loading leave requests:", error);
+            }
+        }
+
+
+
+
+
+        async function updateRequest(employeeId, leaveDocId, status) {
+            try {
+                console.log(`Updating leave request: ${leaveDocId} (Employee: ${employeeId}) → Status: ${status}`);
+
+                const leaveRef = doc(db, "Leave Applicants", employeeId, "Leave Application", leaveDocId);
+                console.log("Firestore Path:", leaveRef.path);
+
+                await updateDoc(leaveRef, { applicationStatus: status });
+
+                alert(`Leave request ${status}!`);
+
+                setTimeout(loadLeaveRequests, 500);
+            } catch (error) {
+                console.error("Error updating request:", error);
+            }
+        }
+
+
+        window.onload = loadLeaveRequests;
+
+        window.submitLeave = submitLeave;
+        window.updateRequest = updateRequest;
+    </script>
+
+
+
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -214,21 +368,27 @@
             <div class="top-container">Leave Application</div>
             <div class="card">
                 <h2 style="font-size: 18px;">Employee Details</h2>
-                <input type="text" placeholder="Employee Name">
-                <select class="select-leavetype">
+                <input type="text" id="employeeId" placeholder="Employee ID">
+                <input type="text" id="employeeName" placeholder="Employee Name">
+                <select id="leaveType">
                     <option value="" disabled selected>Select Leave Type</option>
-                    <option value="sick-leave">Sick Leave</option>
-                    <option value="vacation-leave">Vacation Leave</option>
+                    <option value="Sick Leave">Sick Leave</option>
+                    <option value="Vacation Leave">Vacation Leave</option>
                 </select>
-                <input type="date">
+
                 <h4 style="font-size: 16px;">Select Leave Dates</h4>
                 <div class="date-inputs">
-                    <input type="date">
+                    <input type="date" id="startDate">
                     <p style="font-weight: bold;">To</p>
-                    <input type="date">
+                    <input type="date" id="endDate">
                 </div>
-                <input type="text" placeholder="Number of Days">
+
+                <input type="number" id="numberOfDays" placeholder="Number of Days">
+                <h4 style="font-size: 16px;">Date Submitted</h4>
+                <input type="date" id="dateSubmitted">
+
                 <button onclick="submitLeave()">Save</button>
+
             </div>
         </div>
 
@@ -236,33 +396,17 @@
             <div class="top-container">Leave Requests</div>
             <div class="leave-requests">
                 <table>
-                    <tr>
-                        <th>Employee</th>
-                        <th>Leave Type</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Actions</th>
-                    </tr>
-                    <tr>
-                        <td>Alucard Dracule</td>
-                        <td>Sick Leave</td>
-                        <td>2025-04-10</td>
-                        <td>2025-04-12</td>
-                        <td>
-                            <button class="approve-btn" onclick="approveRequest(this)">Approve</button>
-                            <button class="reject-btn" onclick="rejectRequest(this)">Reject</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jordan Prince</td>
-                        <td>Vacation Leave</td>
-                        <td>2025-04-05</td>
-                        <td>2025-04-07</td>
-                        <td>
-                            <button class="approve-btn" onclick="approveRequest(this)">Approve</button>
-                            <button class="reject-btn" onclick="rejectRequest(this)">Reject</button>
-                        </td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaveRequestsBody">
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -270,9 +414,6 @@
     </div>
 
     <script>
-        function submitLeave() {
-            alert("Leave application submitted!");
-        }
 
         function approveRequest(button) {
             let row = button.parentNode.parentNode;
