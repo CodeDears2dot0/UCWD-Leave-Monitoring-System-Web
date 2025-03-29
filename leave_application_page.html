@@ -56,14 +56,14 @@
                 alert("Leave application submitted successfully!");
                 loadLeaveRequests();
             } catch (error) {
-                console.error("❌ Error submitting leave request:", error);
+                console.error("Error submitting leave request:", error);
             }
         }
 
 
         async function loadLeaveRequests() {
             const tableBody = document.getElementById("leaveRequestsBody");
-            tableBody.innerHTML = ""; // Clear previous data
+            tableBody.innerHTML = "";
 
             try {
                 console.log("Fetching all leave requests...");
