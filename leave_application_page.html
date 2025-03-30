@@ -8,7 +8,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, setDoc, addDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, setDoc, addDoc, doc, updateDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADFPfGqO90p2JYhkM92CAOlPqgAwMtw-g",
@@ -25,10 +25,12 @@
 
         console.log("Firebase initialized successfully!");
 
+
+
         async function submitLeave() {
             const employeeId = document.getElementById("employeeId").value.trim();
             const employeeName = document.getElementById("employeeName").value.trim();
-            const leaveType = document.getElementById("leaveType").value.trim();
+            const leaveType = document.getElementById("leaveType").value;
             const startDate = document.getElementById("startDate").value;
             const endDate = document.getElementById("endDate").value;
             const numberOfDays = document.getElementById("numberOfDays").value;
@@ -42,23 +44,26 @@
             try {
                 console.log(`Submitting leave request for ${employeeName} (ID: ${employeeId})...`);
 
-                const leaveApplicationsRef = collection(db, "Leave Applicants", employeeId, "Leave Application");
+                const leaveApplicationsRef = collection(doc(db, "Leave Applicants", employeeId), "Leave Application");
 
                 await addDoc(leaveApplicationsRef, {
                     applicant: employeeName,
                     applicationLeaveType: leaveType,
-                    applicationLeaveDate: startDate,
+                    applicationStartDate: startDate,
                     applicationEndDate: endDate,
-                    applicationLeaveDays: numberOfDays,
-                    applicationStatus: "Pending"
+                    applicationLeaveDays: parseInt(numberOfDays),
+                    applicationStatus: "Pending",
+                    dateSubmitted: dateSubmitted
                 });
 
                 alert("Leave application submitted successfully!");
                 loadLeaveRequests();
             } catch (error) {
                 console.error("Error submitting leave request:", error);
+                alert("Failed to submit leave application.");
             }
         }
+
 
 
         async function loadLeaveRequests() {
@@ -68,51 +73,45 @@
             try {
                 console.log("Fetching all leave requests...");
 
-                const leaveApplicantsSnapshot = await getDocs(collection(db, "Leave Applicants"));
-                console.log(`Total Employees Found: ${leaveApplicantsSnapshot.size}`);
+                const leaveRequestsSnapshot = await getDocs(collectionGroup(db, "Leave Application"));
+                console.log(`Total leave requests found: ${leaveRequestsSnapshot.size}`);
 
-                if (leaveApplicantsSnapshot.empty) {
-                    console.warn("No employees found.");
+                if (leaveRequestsSnapshot.empty) {
+                    console.warn("No leave requests found.");
                     return;
                 }
 
-                for (const employeeDoc of leaveApplicantsSnapshot.docs) {
-                    const employeeId = employeeDoc.id;
-                    console.log(`Checking Employee ID: ${employeeId}`);
+                leaveRequestsSnapshot.forEach((leaveDoc) => {
+                    const data = leaveDoc.data();
+                    console.log(`Data for ${leaveDoc.id}:`, data);
 
-                    const leaveApplicationsRef = collection(db, "Leave Applicants", employeeId, "Leave Application");
-                    const leaveApplicationsSnapshot = await getDocs(leaveApplicationsRef);
+                    let newRow = document.createElement("tr");
 
-                    console.log(`Found ${leaveApplicationsSnapshot.size} leave applications for ${employeeId}`);
+                    newRow.innerHTML = `
+                <td>${data.applicant || "N/A"}</td>
+                <td>${data.applicationLeaveType || "N/A"}</td>
+                <td>${data.applicationStartDate || "N/A"}</td>
+                <td>${data.applicationEndDate || "N/A"}</td>
+                <td>
+    <div>
+        ${data.applicationStatus === "Pending" ? `
+            <button class="approve-btn" onclick="updateRequest('${leaveDoc.ref.parent.parent.id}', '${leaveDoc.id}', 'Approved')">Approve</button>
+            <button class="reject-btn" onclick="updateRequest('${leaveDoc.ref.parent.parent.id}', '${leaveDoc.id}', 'Rejected')">Reject</button>
+        ` : `<button class="${data.applicationStatus === 'Approved' ? 'approve-btn' : 'reject-btn'}" style="width: auto;">${data.applicationStatus}</button>`}
+    </div>
+</td>
 
-                    leaveApplicationsSnapshot.forEach((leaveDoc) => {
-                        const data = leaveDoc.data();
-                        console.log(`Data for ${employeeId} - ${leaveDoc.id}:`, data);
+            `;
 
-                        let newRow = document.createElement("tr");
+                    tableBody.appendChild(newRow);
+                });
 
-                        newRow.innerHTML = `
-                    <td>${data.applicant || "N/A"}</td>
-                    <td>${data.applicationLeaveType || "N/A"}</td>
-                    <td>${data.applicationLeaveDate || "N/A"}</td>
-                    <td>${data.applicationEndDate || "N/A"}</td>
-                    <td>
-                        ${data.applicationStatus === "Pending" ? `
-                            <button class="approve-btn" onclick="updateRequest('${employeeId}', '${leaveDoc.id}', 'Approved')">Approve</button>
-                            <button class="reject-btn" onclick="updateRequest('${employeeId}', '${leaveDoc.id}', 'Rejected')">Reject</button>
-                        ` : `<button class="${data.applicationStatus === 'Approved' ? 'approve-btn' : 'reject-btn'}" style="width: 100%;">${data.applicationStatus}</button>`}
-                    </td>
-                `;
-
-                        tableBody.appendChild(newRow);
-                    });
-                }
-
-                console.log(`Successfully loaded leave requests!`);
+                console.log("Successfully loaded leave requests!");
             } catch (error) {
                 console.error("Error loading leave requests:", error);
             }
         }
+
 
 
 
@@ -130,11 +129,12 @@
                 await updateDoc(leaveRef, { applicationStatus: status });
 
                 alert(`Leave request ${status}!`);
-                setTimeout(loadLeaveRequests, 500);
+                loadLeaveRequests(); // Directly update UI
             } catch (error) {
                 console.error("Error updating request:", error);
             }
         }
+
 
 
         window.onload = loadLeaveRequests;
@@ -210,34 +210,43 @@
             display: flex;
             width: 100%;
             flex-grow: 1;
-            justify-content: space-around;
-            padding: 10px;
-            gap: 10px;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
             height: calc(100vh - 80px);
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
 
         .container {
             flex: 1;
+            max-width: 850px;
             background-color: #fff;
             border-radius: 15px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             min-height: fit-content;
             max-height: fit-content;
+            width: 100%;
+            overflow-x: auto;
             overflow: auto;
+            border: 2px solid #ccc;
         }
+
 
         .top-container {
             background-color: green;
             color: white;
-            padding: 10px;
+            padding: 12px;
             border-radius: 15px 15px 0 0;
             text-align: center;
             font-size: 18px;
             font-weight: bold;
+            border-bottom: 2px solid #ccc;
         }
+
         .logo {
             width: 75px;
             height: 75px;
@@ -256,7 +265,12 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
         }
+
 
         .card input,
         .card select {
@@ -296,9 +310,23 @@
 
         .leave-requests {
             flex-grow: 1;
-            overflow: auto;
-            max-height: 85vh;
+            overflow-y: auto;
+            max-height: 400px;
+            border-radius: 10px;
+            border: 2px solid #ccc;
+            padding: 10px;
         }
+
+        .leave-requests td {
+            text-align: center;
+        }
+
+        .leave-requests td div {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
 
         .leave-requests table {
             width: 100%;
@@ -308,7 +336,7 @@
         .leave-requests th,
         .leave-requests td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
             word-wrap: break-word;
         }
@@ -367,7 +395,7 @@
             <div class="top-container">Leave Application</div>
             <div class="card">
                 <h2 style="font-size: 18px;">Employee Details</h2>
-                <input type="hidden" id="employeeId" value="03-2122-031549">
+                <input type="hidden" id="employeeId" value="Leave Applicants">
                 <input type="text" id="employeeName" placeholder="Employee Name">
                 <select id="leaveType">
                     <option value="" disabled selected>Select Leave Type</option>

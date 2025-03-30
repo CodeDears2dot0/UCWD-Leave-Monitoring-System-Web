@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyADFPfGqO90p2JYhkM92CAOlPqgAwMtw-g",
@@ -26,10 +27,10 @@
             const searchInput = document.getElementById("searchInput");
             const searchButton = document.getElementById("searchButton");
 
-            searchButton.addEventListener("click", () => {
+            searchButton.addEventListener("click", async () => {
                 const employeeId = searchInput.value.trim();
                 if (employeeId) {
-                    loadEmployeeLeave(employeeId);
+                    await searchEmployeeById(employeeId);
                 } else {
                     alert("Please enter a valid Employee ID.");
                 }
@@ -42,16 +43,18 @@
             });
         });
 
-        async function loadEmployeeLeave(employeeId) {
+        async function searchEmployeeById(employeeId) {
             const summaryTableBody = document.getElementById("summaryBody");
             summaryTableBody.innerHTML = "";
 
             try {
                 const leaveApplicationsRef = collection(db, "Leave Applicants", employeeId, "Leave Application");
-                const leaveApplicationsSnapshot = await getDocs(leaveApplicationsRef);
+
+                const q = query(leaveApplicationsRef, where("applicationStatus", "==", "Approved"));
+                const leaveApplicationsSnapshot = await getDocs(q);
 
                 if (leaveApplicationsSnapshot.empty) {
-                    summaryTableBody.innerHTML = "<tr><td colspan='4'>No records found</td></tr>";
+                    summaryTableBody.innerHTML = "<tr><td colspan='4'>No approved requests found</td></tr>";
                     return;
                 }
 
@@ -60,19 +63,55 @@
 
                     let newRow = document.createElement("tr");
                     newRow.innerHTML = `
-                        <td>${data.applicant || "N/A"}</td>
-                        <td>${data.applicationLeaveType || "N/A"}</td>
-                        <td>${data.applicationLeaveDays || "N/A"}</td>
-                        <td>${data.applicationStatus || "N/A"}</td>
-                    `;
+                <td>${data.applicant || "N/A"}</td>
+                <td>${data.applicationLeaveType || "N/A"}</td>
+                <td>${data.applicationLeaveDays || "N/A"}</td>
+                <td>${data.applicationStatus || "N/A"}</td>
+            `;
                     summaryTableBody.appendChild(newRow);
                 });
             } catch (error) {
-                console.error("Error loading leave summary:", error);
+                console.error("Error fetching approved leave data:", error);
                 summaryTableBody.innerHTML = "<tr><td colspan='4'>Error fetching data</td></tr>";
             }
         }
+
+
+        async function loadEmployeeLeave(employeeId) {
+            const summaryTableBody = document.getElementById("summaryBody");
+            summaryTableBody.innerHTML = "";
+            try {
+                const leaveApplicationsRef = collection(db, "Leave Applicants", employeeId, "Leave Application");
+
+                const q = query(leaveApplicationsRef, where("applicationStatus", "==", "Approved"));
+                const leaveApplicationsSnapshot = await getDocs(q);
+
+                if (leaveApplicationsSnapshot.empty) {
+                    summaryTableBody.innerHTML = "<tr><td colspan='4'>No approved requests found</td></tr>";
+                    return;
+                }
+
+                leaveApplicationsSnapshot.forEach((leaveDoc) => {
+                    const data = leaveDoc.data();
+
+                    let newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                <td>${data.applicant || "N/A"}</td>
+                <td>${data.applicationLeaveType || "N/A"}</td>
+                <td>${data.applicationLeaveDays || "N/A"}</td>
+                <td>${data.applicationStatus || "N/A"}</td>
+            `;
+                    summaryTableBody.appendChild(newRow);
+                });
+            } catch (error) {
+                console.error("Error loading approved leave summary:", error);
+                summaryTableBody.innerHTML = "<tr><td colspan='4'>Error fetching data</td></tr>";
+            }
+        }
+
     </script>
+
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -83,6 +122,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow: hidden;
         }
 
         .header {
@@ -133,28 +173,32 @@
         }
 
         .container {
+            flex: 1;
             width: 100%;
-            max-width: 1190px;
+            max-width: 1100px;
             background-color: #fff;
             display: flex;
             flex-direction: column;
-            height: 670px;
+            min-height: fit-content;
+            max-height: fit-content;
             border-radius: 20px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            position: relative;
+            border: 2px solid #ccc;
             margin-top: 20px;
+            overflow: auto;
+            overflow-x: auto;
         }
 
         .top-container {
             background-color: green;
             color: white;
-            padding: 20px;
-            border-radius: 20px 20px 0 0;
-            display: flex;
+            padding: 12px;
+            border-radius: 15px 15px 0 0;
             align-items: center;
+            border-bottom: 2px solid #ccc;
             justify-content: center;
-            gap: 10px; 
+            font-weight: bold;
         }
 
         .logo {
@@ -175,18 +219,22 @@
         }
 
         .card {
-            background-color: white;
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 40px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            height: 700px;
+            flex-grow: 1;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
         }
 
         .card h2 {
             text-align: center;
             font-size: 24px;
+            max-height: fit-content;
+            min-height: fit-content;
             margin-bottom: 20px;
         }
 
@@ -194,9 +242,10 @@
             width: 95%;
             padding: 12px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 2px solid #ccc;
             border-radius: 6px;
             font-size: 16px;
+            box-sizing: border-box;
         }
 
         .card button {
@@ -234,6 +283,7 @@
         .bottom-buttons button:hover {
             background-color: #6BB03A;
         }
+
         .back-btn {
             display: inline-block;
             margin-top: 20px;
@@ -247,17 +297,19 @@
         .back-btn:hover {
             background-color: #6BB03A;
         }
-                .search-container input {
+
+        .search-container input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
+            border: 2px solid #ccc;
             border-radius: 6px;
             font-size: 16px;
-            height: 40px; 
+            height: 40px;
         }
-    .search-container button {
+
+        .search-container button {
             padding: 12px;
-            height: 40px; 
+            height: 40px;
             background-color: #7CC644;
             color: white;
             border: none;
@@ -274,9 +326,12 @@
             width: 80%;
             margin: 20px auto;
             border-collapse: collapse;
+            border: 2px solid #ccc;
+            
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
@@ -286,9 +341,9 @@
             background-color: #218838;
             color: white;
         }
-        
     </style>
 </head>
+
 <body>
 
     <div class="header">
@@ -328,23 +383,8 @@
                 </thead>
                 <tbody id="summaryBody"></tbody>
             </table>
-
-
-
-            
-            
         </div>
-        <a href="leave_monitor_page.html" class="back-btn">Back to Dashboard</a>
-
     </div>
-
 </body>
-<script>
-    function exit(){
-        window.location.href = "leave_monitor_page.html";
-    }
-    function record(){
-        window.location.href = "leave_application_page.html";
-    }
-</script>
+
 </html>
