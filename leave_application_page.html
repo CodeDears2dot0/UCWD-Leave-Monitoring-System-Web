@@ -122,7 +122,7 @@
                 await updateDoc(leaveRef, { applicationStatus: status });
 
                 alert(`Leave request ${status}!`);
-                loadLeaveRequests(); // Directly update UI
+                loadLeaveRequests();
             } catch (error) {
                 console.error("Error updating request:", error);
             }
