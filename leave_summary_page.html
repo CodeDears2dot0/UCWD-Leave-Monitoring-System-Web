@@ -65,7 +65,9 @@
                     newRow.innerHTML = `
                 <td>${data.applicant || "N/A"}</td>
                 <td>${data.applicationLeaveType || "N/A"}</td>
+                <td>${data.applicationLeaveDate || "N/A"}</td>
                 <td>${data.applicationLeaveDays || "N/A"}</td>
+                <td>${data.applicationQuality || "N/A"}</td>
                 <td>${data.applicationStatus || "N/A"}</td>
             `;
                     summaryTableBody.appendChild(newRow);
@@ -98,7 +100,9 @@
                     newRow.innerHTML = `
                 <td>${data.applicant || "N/A"}</td>
                 <td>${data.applicationLeaveType || "N/A"}</td>
+                <td>${data.applicationLeaveDate || "N/A"}</td>
                 <td>${data.applicationLeaveDays || "N/A"}</td>
+                <td>${data.applicationQuality || "N/A"}</td>
                 <td>${data.applicationStatus || "N/A"}</td>
             `;
                     summaryTableBody.appendChild(newRow);
@@ -377,7 +381,9 @@
                     <tr>
                         <th>Employee Name</th>
                         <th>Leave Type</th>
+                        <th>Leave Date</th>
                         <th>Days Taken</th>
+                        <th>Leave Quality</th>
                         <th>Status</th>
                     </tr>
                 </thead>

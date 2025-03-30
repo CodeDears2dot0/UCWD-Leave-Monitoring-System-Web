@@ -67,50 +67,43 @@
 
 
         async function loadLeaveRequests() {
-            const tableBody = document.getElementById("leaveRequestsBody");
-            tableBody.innerHTML = "";
+    const tableBody = document.getElementById("leaveRequestsBody");
+    tableBody.innerHTML = "";
 
-            try {
-                console.log("Fetching all leave requests...");
+    try {
+        console.log("Fetching pending leave requests...");
 
-                const leaveRequestsSnapshot = await getDocs(collectionGroup(db, "Leave Application"));
-                console.log(`Total leave requests found: ${leaveRequestsSnapshot.size}`);
+        const leaveRequestsSnapshot = await getDocs(collectionGroup(db, "Leave Application"));
+        
+        leaveRequestsSnapshot.forEach((leaveDoc) => {
+            const data = leaveDoc.data();
 
-                if (leaveRequestsSnapshot.empty) {
-                    console.warn("No leave requests found.");
-                    return;
-                }
+            if (data.applicationStatus !== "Pending") return;
 
-                leaveRequestsSnapshot.forEach((leaveDoc) => {
-                    const data = leaveDoc.data();
-                    console.log(`Data for ${leaveDoc.id}:`, data);
+            let newRow = document.createElement("tr");
 
-                    let newRow = document.createElement("tr");
-
-                    newRow.innerHTML = `
+            newRow.innerHTML = `
                 <td>${data.applicant || "N/A"}</td>
                 <td>${data.applicationLeaveType || "N/A"}</td>
-                <td>${data.applicationStartDate || "N/A"}</td>
-                <td>${data.applicationEndDate || "N/A"}</td>
+                <td>${data.applicationLeaveDays || "N/A"}</td>
+                <td>${data.applicationReason || "N/A"}</td>
                 <td>
-    <div>
-        ${data.applicationStatus === "Pending" ? `
-            <button class="approve-btn" onclick="updateRequest('${leaveDoc.ref.parent.parent.id}', '${leaveDoc.id}', 'Approved')">Approve</button>
-            <button class="reject-btn" onclick="updateRequest('${leaveDoc.ref.parent.parent.id}', '${leaveDoc.id}', 'Rejected')">Reject</button>
-        ` : `<button class="${data.applicationStatus === 'Approved' ? 'approve-btn' : 'reject-btn'}" style="width: auto;">${data.applicationStatus}</button>`}
-    </div>
-</td>
-
+                    <div>
+                        <button class="approve-btn" onclick="updateRequest('${leaveDoc.ref.parent.parent.id}', '${leaveDoc.id}', 'Approved')">Approve</button>
+                        <button class="reject-btn" onclick="updateRequest('${leaveDoc.ref.parent.parent.id}', '${leaveDoc.id}', 'Rejected')">Reject</button>
+                    </div>
+                </td>
             `;
 
-                    tableBody.appendChild(newRow);
-                });
+            tableBody.appendChild(newRow);
+        });
 
-                console.log("Successfully loaded leave requests!");
-            } catch (error) {
-                console.error("Error loading leave requests:", error);
-            }
-        }
+        console.log("Successfully loaded pending leave requests!");
+    } catch (error) {
+        console.error("Error loading leave requests:", error);
+    }
+}
+
 
 
 
@@ -427,8 +420,8 @@
                         <tr>
                             <th>Employee</th>
                             <th>Leave Type</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
+                            <th>Leave Days</th>
+                            <th>Reason</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
